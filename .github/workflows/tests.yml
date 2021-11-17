@@ -1,0 +1,33 @@
+name: Tests
+
+on: push
+
+jobs:
+  test:
+    name: Run tests (OTP ${{ matrix.otp }} / Elixir ${{ matrix.elixir }})
+
+    runs-on: ubuntu-18.04
+
+    strategy:
+      matrix:
+        edgedb-version: ["1-rc1"]
+        otp-version: ["24.1.1"]
+        elixir-version: ["1.12.2"]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: nsidnev/setup-edgedb@project-link
+        with:
+          server-version: ${{ matrix.edgedb-version }}
+
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: ${{ matrix.otp-version }}
+          elixir-version: ${{ matrix.elixir-version }}
+
+      - name: Install dependencies
+        run: mix deps.get --only test
+
+      - name: Run tests
+        run: mix test
