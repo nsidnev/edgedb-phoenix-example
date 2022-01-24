@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        edgedb-version: ["1-rc1"]
+        edgedb-version: ["1.0-rc.4"]
         otp-version: ["24.1.1"]
         elixir-version: ["1.12.2"]
 
@@ -30,4 +30,10 @@ jobs:
         run: mix deps.get --only test
 
       - name: Run tests
-        run: mix test
+        env:
+          MIX_ENV: test
+        run: |
+            mix edgedb.database.create
+            mix edgedb.database.migrate
+            mix edgedb.seeds.setup
+            mix test

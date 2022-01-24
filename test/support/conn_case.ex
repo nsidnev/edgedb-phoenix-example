@@ -1,4 +1,4 @@
-defmodule PhxEdbWeb.ConnCase do
+defmodule EPEWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule PhxEdbWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use PhxEdbWeb.ConnCase, async: true`, although
+  by setting `use EPEWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -21,11 +21,11 @@ defmodule PhxEdbWeb.ConnCase do
     quote do
       import Plug.Conn
       import Phoenix.ConnTest
-      import PhxEdbWeb.ConnCase
+      import EPEWeb.ConnCase
 
-      alias PhxEdbWeb.Router.Helpers, as: Routes
+      alias EPEWeb.Router.Helpers, as: Routes
 
-      @endpoint PhxEdbWeb.Endpoint
+      @endpoint EPEWeb.Endpoint
     end
   end
 

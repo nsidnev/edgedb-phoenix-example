@@ -1,14 +1,30 @@
-defmodule PhxEdb.MixProject do
+defmodule EPE.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :phx_edb,
+      app: :epe,
       version: "0.0.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
+      elixirc_options: [
+        warnings_as_errors: true
+      ],
       compilers: Mix.compilers(),
       start_permanent: Mix.env() == :prod,
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        dialyzer: :test,
+        credo: :test,
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.github": :test,
+        "coveralls.html": :test
+      ],
+      dialyzer: [
+        plt_add_apps: [:ex_unit],
+        plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
+      ],
       aliases: aliases(),
       deps: deps()
     ]
@@ -16,7 +32,7 @@ defmodule PhxEdb.MixProject do
 
   def application do
     [
-      mod: {PhxEdb.Application, []},
+      mod: {EPE.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -26,16 +42,33 @@ defmodule PhxEdb.MixProject do
 
   defp deps do
     [
-      {:phoenix, "~> 1.6.2"},
+      # phoenix
+      {:phoenix, "~> 1.6.6"},
+      {:phoenix_pubsub, "~> 2.0"},
+      {:corsica, "~> 1.0"},
+      {:plug_cowboy, "~> 2.5"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
+
+      # common
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
-      {:edgedb, git: "https://github.com/nsidnev/edgedb-elixir"}
+
+      # edgedb
+      {:edgedb, git: "https://github.com/nsidnev/edgedb-elixir"},
+
+      # dev
+      {:credo, "~> 1.5", only: [:dev, :test]},
+      {:ex_machina, "~> 2.7", only: :test},
+      {:excoveralls, "~> 0.14", only: :test}
     ]
   end
 
   defp aliases do
-    []
+    [
+      "edgedb.seeds.setup": "run priv/scripts/seeds.exs",
+      "edgedb.database.create": "run priv/scripts/create_db.exs",
+      "edgedb.database.drop": "run priv/scripts/drop_db.exs",
+      "edgedb.database.migrate": "run priv/scripts/migrate.exs"
+    ]
   end
 end
