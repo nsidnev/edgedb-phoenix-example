@@ -31,6 +31,12 @@ defmodule EPEWeb.ConnCase do
 
   setup _context do
     conn = Phoenix.ConnTest.build_conn()
+    :ok = EdgeDB.Sandbox.initialize(EPE.EdgeDB)
+
+    on_exit(fn ->
+      EdgeDB.Sandbox.clean(EPE.EdgeDB)
+    end)
+
     %{conn: Plug.Conn.put_req_header(conn, "accept", "application/json")}
   end
 end

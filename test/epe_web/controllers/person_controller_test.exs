@@ -19,7 +19,6 @@ defmodule EPEWeb.PersonControllerTest do
 
   describe "POST /api/persons" do
     test "lists all peresons", %{conn: conn} do
-      # refactor cleanup when nested transactions will be supported in driver
       first_name = "first_name"
       last_name = "last_name"
 
@@ -31,13 +30,11 @@ defmodule EPEWeb.PersonControllerTest do
 
       assert %{
                "person" => %{
-                 "id" => id,
+                 "id" => _id,
                  "first_name" => ^first_name,
                  "last_name" => ^last_name
                }
              } = json_response(conn, 200)
-
-      EdgeDB.query!(EPE.EdgeDB, "DELETE default::Person FILTER .id = <uuid>$0", [id])
     end
   end
 end

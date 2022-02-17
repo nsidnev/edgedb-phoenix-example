@@ -8,7 +8,7 @@ seeds_queries =
     File.read!(seed_path)
   end
 
-{:ok, pid} = EdgeDB.start_link()
+{:ok, pid} = EdgeDB.start_link(connection: EdgeDB.Connection)
 
 for query <- seeds_queries do
   EdgeDB.query!(pid, query)

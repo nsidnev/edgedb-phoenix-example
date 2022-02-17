@@ -10,4 +10,5 @@ config :logger, level: :warn
 config :phoenix, :plug_init_mode, :runtime
 
 config :edgedb,
-  database: "epe_test"
+  database: "epe_test",
+  connection: EdgeDB.Sandbox
